@@ -82,6 +82,13 @@ reg = lgb.train(params, lgb_data)
 
 print('Finished training lgb model')
 
+model_id = draw_id(os.path.join('models', 'model_ids.joblib'))
+
+model_path = os.path.join('models',
+                          ''.join(['model_', str(model_id), '.joblib']))
+with open(model_path, 'wb') as f:
+    dump(reg, f)
+
 test_features = build_test_features(
                     test_dates=test_dates, train_dates=train_dates,
                     ar_lags=ar_lags, ma_periods=ma_periods,

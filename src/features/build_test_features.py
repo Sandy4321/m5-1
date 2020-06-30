@@ -66,7 +66,7 @@ def build_test_features(test_dates, train_dates, ar_lags, ma_periods,
         test_wd = [calendar.weekday[calendar.date == td].values[0]
                    for td in test_dates]
         test_features['weekday'] = np.repeat(test_wd, n_obs)
-    if 'store_id' in other_features:
+    if 'store_id' in other_features or 'sell_price' in other_features:
         test_features['store_id'] = np.tile(sales['store_id'], n_dates)
     if 'event_name_1' in other_features:
         test_ev1 = [calendar.event_name_1[calendar.date == td].values[0]
