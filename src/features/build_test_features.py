@@ -49,6 +49,8 @@ def build_test_features(test_dates, train_dates, ar_lags, ma_periods,
 
     test_features['date'] = np.repeat(test_dates, n_obs)
 
+    test_dates_dt = pd.to_datetime(test_dates)
+
     if 'mean' in other_features:
         test_features['mean'] = np.tile(sales_df.mean(), n_dates)
     if 'month' in other_features:
@@ -58,7 +60,7 @@ def build_test_features(test_dates, train_dates, ar_lags, ma_periods,
         test_features['year'] = np.repeat([td.year for td in test_dates], n_obs)
     if 'days' in other_features:
         test_features['days'] = np.repeat([(td - calendar.date.min()).days
-                                          for td in test_dates], n_obs)
+                                          for td in test_dates_dt], n_obs)
     if 'weekday' in other_features:
         test_wd = [calendar.weekday[calendar.date == td].values[0]
                    for td in test_dates]
