@@ -13,10 +13,10 @@ from src.features.build_test_features import *
 from src.models.preprocess import *
 from src.models.model_mgmt import *
 
-calendar_path = os.path.join('..', 'data', 'raw', 'calendar.csv')
-sales_train_path = os.path.join('..', 'data', 'raw', 'sales_train_validation.csv')
-price_path = os.path.join('..', 'data', 'raw', 'sell_prices.csv')
-sample_path = os.path.join('..', 'data', 'raw', 'sample_submission.csv')
+calendar_path = os.path.join('data', 'calendar.csv')
+sales_train_path = os.path.join('data', 'sales_train_validation.csv')
+price_path = os.path.join('data', 'sell_prices.csv')
+sample_path = os.path.join('data', 'sample_submission.csv')
 
 calendar = pd.read_csv(calendar_path, parse_dates=['date'])
 sales = pd.read_csv(sales_train_path)
@@ -72,11 +72,9 @@ for train_idx, test_idx in TimeSeriesSplit(3).split(calendar[calendar.d.isin(sal
         "objective" : "poisson",
         "metric" :"rmse",
         "learning_rate" : 0.075,
-#         "sub_feature" : 0.8,
         "sub_row" : 0.75,
         "bagging_freq" : 1,
         "lambda_l2" : 0.1,
-#         "nthread" : 4
         "metric": ["rmse"],
         'verbosity': 1,
         'num_iterations' : 1200,
@@ -121,14 +119,14 @@ mn_importances = np.mean(importances, axis=0).tolist()
 
 print('Finished cross validating. Model score: ' + str(model_score))
 
-model_id = draw_id(os.path.join('..', 'models', 'model_ids.joblib'), create_new=True)
+model_id = draw_id(os.path.join('models', 'model_ids.joblib'))
 
-meta_dir = os.path.join('..', 'models', 'metadata')
+meta_dir = os.path.join('models', 'metadata')
 
 model_meta = save_metadata(model=reg, model_id=model_id, model_score=model_score,
                            importances=mn_importances, dir_path=meta_dir)
 
-best_model_path = os.path.join('..', 'models', 'metadata', 'best_model.csv')
+best_model_path = os.path.join('models', 'metadata', 'best_model.csv')
 
 if os.path.exists(best_model_path):
     best_model = pd.read_csv(best_model_path, squeeze=True, index_col=0)
