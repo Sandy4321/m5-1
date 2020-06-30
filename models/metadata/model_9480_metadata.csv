@@ -1,0 +1,4 @@
+model_id,9480
+feature_names,"['days_7', 'days_28', 'months_1', 'years_1', 'ma_30', 'days', 'weekday']"
+feature_importances,"[27325.0, 0.0, 0.0, 0.0, 50987.0, 52145.0, 21943.0]"
+score,4.869316916367562
