@@ -89,6 +89,12 @@ model_path = os.path.join('models',
 with open(model_path, 'wb') as f:
     dump(reg, f)
 
+le_path = os.path.join('models', ''.join(['le_', str(model_id), '.joblib']))
+with open(le_path, 'wb') as f:
+    dump(les, f)
+
+print('Model and le saved')
+
 test_features = build_test_features(
                     test_dates=test_dates, train_dates=train_dates,
                     ar_lags=ar_lags, ma_periods=ma_periods,
