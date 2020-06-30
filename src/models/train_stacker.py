@@ -51,18 +51,27 @@ quant_names = arma_features + [fn for fn in feature_names
                                if fn in quant_features]
 str_names = [fn for fn in feature_names if fn in str_features]
 
-cat_df, les = le_cat_features(train_features, str_names)
+le_path = 'models/le_5961.joblib'
+with open(le_path, 'rb') as f:
+    les = load(f)
+
+cat_train = [le.transform(train_features[str_names[i]])
+            for i, le in enumerate(les)]
+cat_train_df = pd.concat([pd.DataFrame(cp) for cp in cat_train], axis=1)
+cat_train_df.columns = str_names
+
+print('Finished label encoding')
 
 X_train = pd.concat([train_features[quant_names].reset_index(drop=True),
-                        cat_df], axis=1)
+                        cat_train_df], axis=1)
 
-model_path = 'models/model_9128.joblib'
+model_path = 'models/model_5961.joblib'
 with open(model_path, 'rb') as f:
     reg = load(f)
 
 lgbm_preds = reg.predict(X_train)
 
-lgbm_pred_path = 'models/model_9128_preds.joblib'
+lgbm_pred_path = 'models/model_5961_preds.joblib'
 with open(lgbm_pred_path, 'wb') as f:
     dump(lgbm_preds, f)
 
